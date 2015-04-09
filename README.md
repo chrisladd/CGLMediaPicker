@@ -9,10 +9,21 @@ CGLMediaPicker allows the user to choose a piece of multimedia of an array of ty
  
 It takes care of all permissions and UI, and is automatically retained in memory for as long as the user is actively choosing. There is no need for clients to maintain a reference.
 
-It takes care of informing the user why permissions are lacking, when they're lacking, and sends them to Settings.app to take care of any problems they might need to.
+`ALAuthorizationStatus`? `UIImagePickerControllerDelegate`? `PHImageRequestOptions`? Who's got time for that $@*!?
+
+CGLMediaPicker makes letting users provide photos as simple as creating a picker object, configuring it, and:
+
+``` 
+picker.completion = ^(UIImage *image, NSDictionary *info, NSError *error){
+    // doing something nice with your user's chosen image
+};
+```
+
+It takes care of presenting the right photo picker or camera components. It takes care of asking for permissions, informing the user why permissions are lacking, when they're lacking, and sends them to Settings.app to take care of any problems they might need to.
  
 In short, CGLMediaPicker lets you, the client, say: I would like the user to give me a piece of media. And then lets you sit back and wait for that media to arrive.
 
+Doesn't that sound nice?
 
 <img src=/demo1.PNG width=200 />  <img src=/demo2.PNG width=200 />  <img src=/demo3.PNG width=200 /> 
  <img src=/demo4.PNG width=200 />  <img src=/demo5.PNG width=200 />  <img src=/demo6.PNG width=200 /> 
