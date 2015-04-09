@@ -13,6 +13,11 @@ It takes care of informing the user why permissions are lacking, when they're la
  
 In short, CGLMediaPicker lets you, the client, say: I would like the user to give me a piece of media. And then lets you sit back and wait for that media to arrive.
 
+
+<img src=/demo1.PNG width=200 />  <img src=/demo2.PNG width=200 />  <img src=/demo3.PNG width=200 /> 
+ <img src=/demo4.PNG width=200 />  <img src=/demo5.PNG width=200 />  <img src=/demo6.PNG width=200 /> 
+
+
 ## Usage
 
 ```
