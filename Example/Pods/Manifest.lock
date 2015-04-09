@@ -1,0 +1,14 @@
+PODS:
+  - CGLMediaPicker (0.1.0)
+
+DEPENDENCIES:
+  - CGLMediaPicker (from `../`)
+
+EXTERNAL SOURCES:
+  CGLMediaPicker:
+    :path: ../
+
+SPEC CHECKSUMS:
+  CGLMediaPicker: ff0a18012be6a6a74079d8bce3ddbc3d589431cf
+
+COCOAPODS: 0.35.0

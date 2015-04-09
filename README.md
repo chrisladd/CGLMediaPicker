@@ -5,11 +5,39 @@
 [![License](https://img.shields.io/cocoapods/l/CGLMediaPicker.svg?style=flat)](http://cocoapods.org/pods/CGLMediaPicker)
 [![Platform](https://img.shields.io/cocoapods/p/CGLMediaPicker.svg?style=flat)](http://cocoapods.org/pods/CGLMediaPicker)
 
+CGLMediaPicker allows the user to choose a piece of multimedia of an array of types provided by the client, and runs a completion block once the user has either successfully chosen, or cancelled for some reason. Influenced by ClusterPrePermissions, with the goal of being lighter weight, and generally allowing clients to be more hands off.
+ 
+It takes care of all permissions and UI, and is automatically retained in memory for as long as the user is actively choosing. There is no need for clients to maintain a reference.
+
+It takes care of informing the user why permissions are lacking, when they're lacking, and sends them to Settings.app to take care of any problems they might need to.
+ 
+In short, CGLMediaPicker lets you, the client, say: I would like the user to give me a piece of media. And then lets you sit back and wait for that media to arrive.
+
 ## Usage
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
+```
+__weak __typeof(self) weakSelf = self;
+    
+// initialize a new picker
+CGLMediaPicker *picker = [[CGLMediaPicker alloc] initWithViewController:self];
 
-## Requirements
+// give it a series of inputs -- this will automatically be narrowed down by the picker to the inputs actually available on the user's device. e.g. if they don't have a camera
+picker.inputs = @[CGLMediaPickerOptionCamera, CGLMediaPickerOptionPhotoLibrary, CGLMediaPickerOptionUserLastPhoto];
+
+// tell the user a little about what you'll use their photos for
+picker.permissionMessage = NSLocalizedString(@"We'll use your photos to set the background to this view controller.", nil);
+
+// add a completion. note that you don't have to maintain a reference to the picker -- it's stored internally by the class until the user has finished interacting with it.
+picker.completion = ^(UIImage *image, NSDictionary *info, NSError *error){
+    if (image) {
+        weakSelf.imageView.image = image;
+    }
+};
+    
+// lastly, go ahead and pick. This will present your options to the user.
+[picker pick];
+
+```
 
 ## Installation
 
