@@ -26,7 +26,7 @@ In short, CGLMediaPicker lets you, the client, say: I would like the user to giv
 Doesn't that sound nice?
 
 <img src=/Screenshots/demo1.PNG width=200 />  <img src=/Screenshots/demo2.PNG width=200 />  <img src=/Screenshots/demo3.PNG width=200 /> 
- <img src=/Screenshots/demo4.PNG width=200 />  <img src=/Screenshots/demo5.PNG width=200 />  <img src=/Screenshots/demo6.PNG width=200 /> 
+<img src=/Screenshots/demo1.PNG width=200 /> <img src=/Screenshots/demo4.PNG width=200 />  <img src=/Screenshots/demo5.PNG width=200 />  <img src=/Screenshots/demo6.PNG width=200 /> 
 
 
 ## Usage
