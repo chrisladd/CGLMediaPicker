@@ -5,11 +5,11 @@
 [![License](https://img.shields.io/cocoapods/l/CGLMediaPicker.svg?style=flat)](http://cocoapods.org/pods/CGLMediaPicker)
 [![Platform](https://img.shields.io/cocoapods/p/CGLMediaPicker.svg?style=flat)](http://cocoapods.org/pods/CGLMediaPicker)
 
-CGLMediaPicker allows the user to choose a piece of multimedia of an array of types provided by the client, and runs a completion block once the user has either successfully chosen, or cancelled for some reason. Influenced by ClusterPrePermissions, with the goal of being lighter weight, and generally allowing clients to be more hands off.
+CGLMediaPicker allows the user to choose a piece of multimedia of an array of types provided by the client, and runs a completion block once the user has either successfully chosen, or cancelled for some reason. Influenced by [ClusterPrePermissions](https://github.com/clusterinc/ClusterPrePermissions), with the goal of being lighter weight, and generally allowing clients to be more hands off.
  
-It takes care of all permissions and UI, and is automatically retained in memory for as long as the user is actively choosing. There is no need for clients to maintain a reference.
+CGLMediaPicker uses the same [very nice "fake alert" strategy](https://medium.com/launch-kit/the-right-way-to-ask-users-for-ios-permissions-96fa4eb54f2c) to dramatically cut down on users opting out. What's more, the picker takes care of all permissions and UI, and is automatically retained in memory for as long as the user is actively choosing.
 
-`ALAuthorizationStatus`? `UIImagePickerControllerDelegate`? `PHImageRequestOptions`? Who's got time for that $@*!?
+I mean, seriously: `ALAuthorizationStatus`? `UIImagePickerControllerDelegate`? `PHImageRequestOptions`? Who's got time for that $@*!?
 
 CGLMediaPicker makes letting users provide photos as simple as creating a picker object, configuring it, and:
 
