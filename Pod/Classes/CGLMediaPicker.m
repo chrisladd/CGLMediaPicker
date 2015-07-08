@@ -216,8 +216,15 @@ NSInteger const CGLMediaPickerTagPermissionDenied = 1002;
 
 // kudos to https://github.com/clusterinc/ClusterPrePermissions
 - (void)preRequestForAssetNamed:(NSString *)assetName message:(NSString *)message tag:(NSInteger)tag {
-    NSString *appName = [[NSBundle mainBundle] infoDictionary][@"CFBundleDisplayName"];
-
+    NSString *appName;
+    
+    id bundleDisplayName = [[NSBundle mainBundle] infoDictionary][@"CFBundleDisplayName"];
+    if (bundleDisplayName != nil) {
+        appName = bundleDisplayName;
+    } else {
+        appName = [[NSBundle mainBundle] infoDictionary][@"CFBundleName"];
+    }
+    
     NSString *title = [NSString stringWithFormat:@"Let %@ Access %@?", appName, assetName];
     
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:NSLocalizedString(@"Not Now", nil) otherButtonTitles:NSLocalizedString(@"Grant Access", nil), nil];
