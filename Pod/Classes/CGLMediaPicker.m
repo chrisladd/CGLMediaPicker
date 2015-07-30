@@ -126,22 +126,23 @@ NSInteger const CGLMediaPickerTagPermissionDenied = 1002;
 }
 
 - (void)getLastUserPhoto:(void(^)(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info))resultHandler {
-    PHImageManager *imageManager = [PHImageManager defaultManager];
-    PHImageRequestOptions *requestOptions = [[PHImageRequestOptions alloc] init];
-    requestOptions.synchronous = YES;
-    
-    PHFetchOptions *fetchOptions = [[PHFetchOptions alloc] init];
-    fetchOptions.sortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"creationDate" ascending:NO]];
-    
-    PHFetchResult *result = [PHAsset fetchAssetsWithMediaType:PHAssetMediaTypeImage options:fetchOptions];
-    
-    if (result.count > 0) {
-        [imageManager requestImageDataForAsset:[result firstObject] options:requestOptions resultHandler:resultHandler];
-    }
-    else {
-        [self failWithReason:@"No last photo exists"];
-    }
-    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        PHImageManager *imageManager = [PHImageManager defaultManager];
+        PHImageRequestOptions *requestOptions = [[PHImageRequestOptions alloc] init];
+        requestOptions.synchronous = YES;
+        
+        PHFetchOptions *fetchOptions = [[PHFetchOptions alloc] init];
+        fetchOptions.sortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"creationDate" ascending:NO]];
+        
+        PHFetchResult *result = [PHAsset fetchAssetsWithMediaType:PHAssetMediaTypeImage options:fetchOptions];
+        
+        if (result.count > 0) {
+            [imageManager requestImageDataForAsset:[result firstObject] options:requestOptions resultHandler:resultHandler];
+        }
+        else {
+            [self failWithReason:@"No last photo exists"];
+        }
+    });
 }
 
 - (void)getAssetsForInput:(NSString *)input {
@@ -150,11 +151,20 @@ NSInteger const CGLMediaPickerTagPermissionDenied = 1002;
         [self presentImagePickerForInput:input];
     }
     else if ([input isEqualToString:CGLMediaPickerOptionUserLastPhoto]) {
+        BOOL wasMainQueue = [NSThread isMainThread];
         [self getLastUserPhoto:^(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
             if (imageData) {
                 UIImage *image = [UIImage imageWithData:imageData];
                 if (self.completion) {
-                    self.completion(image, info, nil);
+                    // if we were on the main queue previously, return on it.
+                    if (wasMainQueue) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            self.completion(image, info, nil);
+                        });
+                    }
+                    else {
+                        self.completion(image, info, nil);
+                    }
                 }
             }
             else {
