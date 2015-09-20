@@ -13,6 +13,8 @@ extern NSString * const CGLMediaPickerOptionCamera;
 
 typedef void(^CGLMediaPickerCompletion)(UIImage *image, NSDictionary *info, NSError *error);
 
+typedef void(^CGLMediaPickerAccessCompletion)(BOOL granted);
+
 /**
  *  CGLMediaPicker allows the user to choose a piece of multimedia of an array of types provided by the client, and runs a completion block ones the user has either successfully chosen, or cancelled for some reason. Influenced by ClusterPrePermissions, with the goal of being lighter weight, and generally allowing clients to be more hands off.
  *
@@ -67,6 +69,13 @@ typedef void(^CGLMediaPickerCompletion)(UIImage *image, NSDictionary *info, NSEr
 
 
 #pragma mark - Checking Availability
+
+/**
+ *  Asks only for access. @note that this will not actually pick for you, but will instead pre-request permissions.
+ *
+ *  @param completion a completion
+ */
+- (void)requestAccess:(CGLMediaPickerAccessCompletion)completion;
 
 /**
  *  Whether or not a given type of input is available.

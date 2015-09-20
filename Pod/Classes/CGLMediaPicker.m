@@ -21,7 +21,8 @@ NSInteger const CGLMediaPickerTagPermissionDenied = 1002;
 @property (nonatomic) NSString *identifier;
 @property (nonatomic) UIViewController *presentingViewController;
 @property (nonatomic) NSString *selectedInput;
-
+@property (nonatomic) BOOL isRequestingAccessOnly;
+@property (nonatomic, copy) CGLMediaPickerAccessCompletion accessCompletion;
 @end
 
 @implementation CGLMediaPicker
@@ -56,6 +57,22 @@ NSInteger const CGLMediaPickerTagPermissionDenied = 1002;
     }
     
     return _identifier;
+}
+
+- (void)requestAccess:(CGLMediaPickerAccessCompletion)completion {
+    self.accessCompletion = completion;
+    self.isRequestingAccessOnly = YES;
+
+    [[self class] keyedPickers][self.identifier] = self;
+    
+    if ([self.inputs count] == 1) {
+        // then just do that action
+        self.selectedInput = [[self inputs] firstObject];
+        [self checkPermissions];
+    }
+    else {
+        [self presentInputOptions];
+    }
 }
 
 - (void)pick {
@@ -122,6 +139,10 @@ NSInteger const CGLMediaPickerTagPermissionDenied = 1002;
         self.completion(nil, nil, error);
     }
     
+    if (self.accessCompletion) {
+        self.accessCompletion(NO);
+    }
+    
     [[self class] removePicker:self];
 }
 
@@ -146,7 +167,13 @@ NSInteger const CGLMediaPickerTagPermissionDenied = 1002;
 }
 
 - (void)getAssetsForInput:(NSString *)input {
-    if ([input isEqualToString:CGLMediaPickerOptionCamera] ||
+    if (self.isRequestingAccessOnly) {
+        if (self.accessCompletion) {
+            self.accessCompletion(YES);
+            [[self class] removePicker:self];
+        }
+    }
+    else if ([input isEqualToString:CGLMediaPickerOptionCamera] ||
         [input isEqualToString:CGLMediaPickerOptionPhotoLibrary]) {
         [self presentImagePickerForInput:input];
     }
@@ -195,7 +222,15 @@ NSInteger const CGLMediaPickerTagPermissionDenied = 1002;
 - (void)checkCameraPermissions {
     AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
     if (authStatus == AVAuthorizationStatusAuthorized) {
-        [self getAssetsForInput:self.selectedInput];
+        if (self.isRequestingAccessOnly) {
+            if (self.accessCompletion) {
+                self.accessCompletion(YES);
+                [CGLMediaPicker removePicker:self];
+            }
+        }
+        else {
+            [self getAssetsForInput:self.selectedInput];
+        }
     }
     else if (authStatus == AVAuthorizationStatusDenied) {
         [self presentPermissionDeniedAlert:NSLocalizedString(@"Camera Unavailable", nil)];
@@ -211,7 +246,15 @@ NSInteger const CGLMediaPickerTagPermissionDenied = 1002;
 - (void)checkPhotoPermissions {
     ALAuthorizationStatus status = [ALAssetsLibrary authorizationStatus];
     if (status == ALAuthorizationStatusAuthorized) {
-        [self getAssetsForInput:self.selectedInput];
+        if (self.isRequestingAccessOnly) {
+            if (self.accessCompletion) {
+                self.accessCompletion(YES);
+                [CGLMediaPicker removePicker:self];
+            }
+        }
+        else {
+            [self getAssetsForInput:self.selectedInput];
+        }
     }
     else if (status == ALAuthorizationStatusDenied) {
         [self presentPermissionDeniedAlert:NSLocalizedString(@"Photos Unavailable", nil)];
