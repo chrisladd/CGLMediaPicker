@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "CGLMediaPicker"
-  s.version          = "0.1.1"
+  s.version          = "0.2.0"
   s.summary          = "The easiest way to let users get images into your app, handling permissions, the camera, and the photo library."
   s.description      = <<-DESC
                        CGLMediaPicker allows the user to choose a piece of multimedia of an array of types provided by the client, and runs a completion block once the user has either successfully chosen, or cancelled for some reason. Influenced by ClusterPrePermissions, with the goal of being lighter weight, and generally allowing clients to be more hands off.
