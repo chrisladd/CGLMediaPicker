@@ -278,7 +278,10 @@ NSInteger const CGLMediaPickerTagPermissionDenied = 1002;
         appName = [[NSBundle mainBundle] infoDictionary][@"CFBundleName"];
     }
     
-    NSString *title = [NSString stringWithFormat:@"Let %@ Access %@?", appName, assetName];
+    NSString *title = self.permissionTitle;
+    if (!title) {
+        title = [NSString stringWithFormat:@"Let %@ Access %@?", appName, assetName];
+    }
     
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:NSLocalizedString(@"Not Now", nil) otherButtonTitles:NSLocalizedString(@"Grant Access", nil), nil];
     alertView.tag = tag;

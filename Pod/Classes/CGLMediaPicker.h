@@ -45,6 +45,11 @@ typedef void(^CGLMediaPickerAccessCompletion)(BOOL granted);
 @property (nonatomic, copy) NSArray *inputs;
 
 /**
+ *  An optional title. If unused, a default "Let %@ Access %@" will be used. 
+ */
+@property (nonatomic, copy) NSString *permissionTitle;
+
+/**
  *  A friendly message presented to the user to ask permission.
  */
 @property (nonatomic, copy) NSString *permissionMessage;
