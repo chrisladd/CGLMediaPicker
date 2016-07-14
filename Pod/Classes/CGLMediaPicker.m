@@ -126,7 +126,9 @@ NSInteger const CGLMediaPickerTagPermissionDenied = 1002;
     
     imagePicker.delegate = self;
     
-    [self.presentingViewController presentViewController:imagePicker animated:YES completion:nil];
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        [self.presentingViewController presentViewController:imagePicker animated:YES completion:nil];
+    }];
 }
 
 - (void)failWithReason:(NSString *)reason {
